@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常见问题 - HKMU 音乐节 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* FAQ页面专属样式 */
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .faq-categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: var(--light);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+        }
+
+        .faq-section {
+            margin-bottom: 50px;
+        }
+
+        .faq-section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .faq-item.active {
+            border-color: var(--primary);
+        }
+
+        .faq-question {
+            padding: 25px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .faq-question .icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 20px;
+        }
+
+        .faq-question .icon svg {
+            width: 14px;
+            height: 14px;
+            fill: white;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-question .icon {
+            background: var(--primary);
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            padding: 0 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 30px 25px;
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            opacity: 0.8;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .faq-answer ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .faq-answer li {
+            margin-bottom: 8px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* 搜索框 */
+        .faq-search {
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 18px 25px;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .search-box input::placeholder {
+            color: var(--gray);
+        }
+
+        .search-box input:focus {
+            outline: none;
+        }
+
+        .search-box button {
+            background: var(--gradient-1);
+            border: none;
+            padding: 18px 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-box button:hover {
+            opacity: 0.9;
+        }
+
+        .search-box button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* 联系区域 */
+        .contact-cta {
+            padding: 80px 50px;
+            background: rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .contact-cta h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-cta p {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+
+        .contact-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-option {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            min-width: 250px;
+        }
+
+        .contact-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .contact-option h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .contact-option p {
+            font-size: 1rem;
+            margin: 0;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .faq-question {
+                padding: 20px;
+                font-size: 0.95rem;
+            }
+
+            .faq-answer {
+                padding: 0 20px;
+            }
+
+            .faq-item.active .faq-answer {
+                padding: 0 20px 20px;
+            }
+
+            .contact-cta {
+                padding: 60px 20px;
+            }
+
+            .contact-options {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- 导航栏 -->
+    <nav>
+        <a href="index.html" class="logo">HKMU FEST</a>
+        <ul class="nav-links">
+            <li><a href="artists.html">艺人阵容</a></li>
+            <li><a href="schedule.html">演出时间</a></li>
+            <li><a href="tickets.html">购票</a></li>
+            <li><a href="venue.html">场地信息</a></li>
+            <li><a href="about.html">关于我们</a></li>
+            <li><a href="faq.html" class="active">常见问题</a></li>
+        </ul>
+        <a href="tickets.html" class="ticket-btn">立即购票</a>
+    </nav>
+
+    <!-- 页面头部 -->
+    <header class="page-header">
+        <div class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+            <span>常见问题</span>
+        </div>
+        <h1>常见问题</h1>
+        <p>在这里找到你需要的答案</p>
+    </header>
+
+    <!-- 搜索框 -->
+    <section style="padding: 0 50px 30px;">
+        <div class="faq-search fade-in">
+            <div class="search-box">
+                <input type="text" placeholder="搜索问题..." id="faqSearch">
+                <button>
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分类筛选 -->
+    <section style="padding: 0 50px 30px;">
+        <div class="faq-categories fade-in">
+            <button class="category-btn active" data-category="all">全部问题</button>
+            <button class="category-btn" data-category="tickets">购票相关</button>
+            <button class="category-btn" data-category="entry">入场须知</button>
+            <button class="category-btn" data-category="venue">场地设施</button>
+            <button class="category-btn" data-category="other">其他问题</button>
+        </div>
+    </section>
+
+    <!-- FAQ内容 -->
+    <section style="padding: 0 50px 80px;">
+        <div class="faq-container">
+            <!-- 购票相关 -->
+            <div class="faq-section" data-category="tickets">
+                <h3 class="faq-section-title fade-in">购票相关</h3>
+
+                <div class="faq-item fade-in" data-category="tickets">
+                    <div class="faq-question">
+                        <span>门票可以退换吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>已购门票在活动开始前7天可申请退票，退票将收取10%手续费。活动开始前7天内不支持退票，但可以转让给他人。如需转让，请在官方平台完成实名信息变更。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="tickets">
+                    <div class="faq-question">
+                        <span>如何获取电子票？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>购票成功后，电子票将在24小时内发送至您购票时填写的邮箱。您也可以登录官网，在"我的订单"中查看和下载电子票。入场时请出示电子票二维码及有效身份证件。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="tickets">
+                    <div class="faq-question">
+                        <span>儿童需要购票吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>3岁以下儿童免票入场（需成人陪同，每位成人最多携带1名免票儿童）。3-12岁儿童可享半价优惠，需提供有效证件。12岁以上需购买全价票。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="tickets">
+                    <div class="faq-question">
+                        <span>单日票可以在当天任意时间入场吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>是的，单日票在所选日期的开放时间内（12:00-次日02:00）可随时入场。当天可多次进出，每次进出需在入口处扫描手环验证。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="tickets">
+                    <div class="faq-question">
+                        <span>VIP票有什么专属权益？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>VIP票持有者可享受以下专属权益：</p>
+                        <ul>
+                            <li>专属VIP观演区，视野最佳位置</li>
+                            <li>参加指定艺人见面会的资格</li>
+                            <li>VIP休息区使用权，含免费餐饮</li>
+                            <li>专属快速入场通道</li>
+                            <li>限量版纪念礼包一份</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 入场须知 -->
+            <div class="faq-section" data-category="entry">
+                <h3 class="faq-section-title fade-in">入场须知</h3>
+
+                <div class="faq-item fade-in" data-category="entry">
+                    <div class="faq-question">
+                        <span>入场需要携带什么证件？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>入场时需出示有效身份证件（身份证、护照或港澳通行证）和电子票二维码。证件姓名需与购票信息一致，否则可能无法入场。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="entry">
+                    <div class="faq-question">
+                        <span>哪些物品禁止携带入场？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>以下物品禁止携带入场：</p>
+                        <ul>
+                            <li>酒精饮料及任何违禁品</li>
+                            <li>专业摄影设备（可拆卸镜头相机）</li>
+                            <li>自拍杆、三脚架、无人机</li>
+                            <li>大型行李箱及背包（超过A4大小）</li>
+                            <li>玻璃容器及易燃易爆物品</li>
+                            <li>宠物（导盲犬除外）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="entry">
+                    <div class="faq-question">
+                        <span>可以带食物和饮料入场吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>为确保活动安全，不建议携带外部食物和饮料入场。场内设有多个餐饮区，提供丰富的餐饮选择。允许携带未开封的矿泉水（不超过500ml），玻璃瓶装饮料禁止入场。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="entry">
+                    <div class="faq-question">
+                        <span>活动期间可以多次进出吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>可以。入场后您将获得一条活动手环，凭手环可在当天多次进出。请妥善保管手环，丢失或损坏将无法补办。再次入场时需在入口处扫描手环验证。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 场地设施 -->
+            <div class="faq-section" data-category="venue">
+                <h3 class="faq-section-title fade-in">场地设施</h3>
+
+                <div class="faq-item fade-in" data-category="venue">
+                    <div class="faq-question">
+                        <span>场地有储物柜吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>是的，场地入口处设有储物柜服务。小型储物柜每次$50，大型储物柜每次$80。储物柜数量有限，先到先得。建议尽量轻装出行。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="venue">
+                    <div class="faq-question">
+                        <span>场地有医疗服务吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>场地设有多个医疗站点，提供基本的急救和医疗服务。如有身体不适，请立即向现场工作人员求助。建议携带个人常用药品。如有特殊健康状况，请提前做好准备。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="venue">
+                    <div class="faq-question">
+                        <span>场地有无障碍设施吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>是的，我们提供完善的无障碍设施，包括无障碍通道、专用洗手间和轮椅观演区。如有特殊需求，请在购票时备注或提前联系我们的客服团队安排。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="venue">
+                    <div class="faq-question">
+                        <span>场地有WiFi吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>场地提供免费WiFi服务。连接方式：搜索WiFi名称"HKMU-FEST"，输入密码"music2026"即可使用。由于现场人流量大，网络可能会有延迟，建议提前下载好需要的内容。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="venue">
+                    <div class="faq-question">
+                        <span>附近有停车场吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>香港都会大学校园内设有停车场，但车位有限。建议乘坐公共交通前往。如需自驾，可使用附近的公共停车场，步行约10分钟可达。活动期间，部分停车场可能会实行特别收费。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 其他问题 -->
+            <div class="faq-section" data-category="other">
+                <h3 class="faq-section-title fade-in">其他问题</h3>
+
+                <div class="faq-item fade-in" data-category="other">
+                    <div class="faq-question">
+                        <span>如遇恶劣天气活动会取消吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>如遇8号或以上台风信号、黑色暴雨警告等恶劣天气，活动可能会延期或取消。我们会通过官方网站、社交媒体和短信通知所有已购票观众。因天气原因取消的场次可申请全额退款。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="other">
+                    <div class="faq-question">
+                        <span>可以在现场拍照录像吗？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>允许使用手机拍照和录像，但禁止使用专业摄影设备、自拍杆和三脚架。拍摄的内容仅供个人使用，未经授权不得用于商业目的。部分演出可能会限制拍摄，请留意现场提示。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="other">
+                    <div class="faq-question">
+                        <span>如何成为音乐节志愿者？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>我们欢迎热爱音乐的朋友加入志愿者团队！志愿者招募通常在活动前2个月开始，请关注官网和社交媒体公告。志愿者将获得免费观演机会、官方纪念品和志愿服务证书。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in" data-category="other">
+                    <div class="faq-question">
+                        <span>如何联系客服？</span>
+                        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>您可以通过以下方式联系我们：</p>
+                        <ul>
+                            <li>客服热线：+852 2711 2100（工作日 9:00-18:00）</li>
+                            <li>客服邮箱：info@hkmufest.com</li>
+                            <li>官方网站在线客服</li>
+                            <li>社交媒体私信</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系区域 -->
+    <section class="contact-cta">
+        <h2 class="fade-in">没有找到答案？</h2>
+        <p class="fade-in">我们的客服团队随时为您解答</p>
+        <div class="contact-options fade-in">
+            <div class="contact-option">
+                <h4>客服热线</h4>
+                <p>+852 2711 2100</p>
+            </div>
+            <div class="contact-option">
+                <h4>客服邮箱</h4>
+                <p>info@hkmufest.com</p>
+            </div>
+            <div class="contact-option">
+                <h4>在线咨询</h4>
+                <p><a href="contact.html" style="color: var(--accent);">前往联系页面</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo">HKMU FEST</span>
+                <p>HKMU音乐节是香港都会大学年度音乐盛典，汇聚华语乐坛顶尖艺人，为你带来十二天的音乐狂欢。</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>快速链接</h4>
+                <ul>
+                    <li><a href="artists.html">艺人阵容</a></li>
+                    <li><a href="schedule.html">演出时间</a></li>
+                    <li><a href="tickets.html">购票</a></li>
+                    <li><a href="venue.html">场地信息</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>参与者须知</h4>
+                <ul>
+                    <li><a href="faq.html">入场须知</a></li>
+                    <li><a href="faq.html">禁止物品</a></li>
+                    <li><a href="faq.html">常见问题</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>更多信息</h4>
+                <ul>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="#">媒体合作</a></li>
+                    <li><a href="#">志愿者招募</a></li>
+                    <li><a href="#">商务合作</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 HKMU Music Festival. All Rights Reserved. | 香港都会大学音乐节</p>
+        </div>
+    </footer>
+
+    <script>
+        // 滚动动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ折叠
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                // 关闭其他打开的项
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                item.classList.toggle('active');
+            });
+        });
+
+        // 分类筛选
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const faqSections = document.querySelectorAll('.faq-section');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.dataset.category;
+
+                faqSections.forEach(section => {
+                    if (category === 'all' || section.dataset.category === category) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 搜索功能
+        const searchInput = document.getElementById('faqSearch');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = searchTerm === '' ? 'block' : 'none';
+                }
+            });
+
+            // 显示所有分类
+            if (searchTerm !== '') {
+                faqSections.forEach(section => section.style.display = 'block');
+                categoryBtns.forEach(btn => btn.classList.remove('active'));
+                categoryBtns[0].classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
+

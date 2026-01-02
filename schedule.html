@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>演出时间表 - HKMU 音乐节 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 时间表页面专属样式 */
+        .schedule-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .day-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .day-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 15px;
+            color: var(--light);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .day-btn:hover,
+        .day-btn.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+        }
+
+        .day-btn .date {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .day-btn .weekday {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* 舞台标签 */
+        .stage-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stage-tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            color: var(--light);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .stage-tab:hover,
+        .stage-tab.active {
+            background: var(--secondary);
+        }
+
+        .stage-tab[data-stage="main"].active {
+            background: var(--gradient-1);
+        }
+
+        .stage-tab[data-stage="electronic"].active {
+            background: var(--secondary);
+        }
+
+        .stage-tab[data-stage="acoustic"].active {
+            background: var(--accent);
+        }
+
+        /* 时间线 */
+        .timeline {
+            position: relative;
+            padding-left: 150px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 120px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateX(10px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            border: 3px solid var(--dark);
+        }
+
+        .timeline-time {
+            position: absolute;
+            left: -150px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent);
+            width: 100px;
+            text-align: right;
+        }
+
+        .timeline-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .timeline-info h4 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .timeline-info p {
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        .timeline-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .timeline-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(255, 45, 85, 0.2);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .timeline-tag.electronic {
+            background: rgba(88, 86, 214, 0.2);
+            color: var(--secondary);
+        }
+
+        .timeline-tag.acoustic {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--accent);
+        }
+
+        .timeline-duration {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        /* 日程概览 */
+        .schedule-overview {
+            padding: 80px 50px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .overview-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            border-color: var(--primary);
+        }
+
+        .overview-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .overview-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .overview-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .overview-card p {
+            opacity: 0.7;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* 下载区域 */
+        .download-section {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .download-section p {
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 1024px) {
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .timeline {
+                padding-left: 20px;
+            }
+
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-item::before {
+                left: -28px;
+            }
+
+            .timeline-time {
+                position: static;
+                transform: none;
+                text-align: left;
+                margin-bottom: 10px;
+                width: auto;
+            }
+
+            .timeline-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .day-selector {
+                gap: 5px;
+            }
+
+            .day-btn {
+                padding: 10px 15px;
+                min-width: auto;
+            }
+
+            .day-btn .date {
+                font-size: 1.2rem;
+            }
+
+            .schedule-overview {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- 导航栏 -->
+    <nav>
+        <a href="index.html" class="logo">HKMU FEST</a>
+        <ul class="nav-links">
+            <li><a href="artists.html">艺人阵容</a></li>
+            <li><a href="schedule.html" class="active">演出时间</a></li>
+            <li><a href="tickets.html">购票</a></li>
+            <li><a href="venue.html">场地信息</a></li>
+            <li><a href="about.html">关于我们</a></li>
+            <li><a href="faq.html">常见问题</a></li>
+        </ul>
+        <a href="tickets.html" class="ticket-btn">立即购票</a>
+    </nav>
+
+    <!-- 页面头部 -->
+    <header class="page-header">
+        <div class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+            <span>演出时间</span>
+        </div>
+        <h1>演出时间表</h1>
+        <p>2026年1月4日至15日，12天精彩演出不间断</p>
+    </header>
+
+    <!-- 日期选择器 -->
+    <section style="padding: 0 50px 30px;">
+        <div class="day-selector fade-in">
+            <button class="day-btn active" data-day="1">
+                <span class="date">4</span>
+                <span class="weekday">周日</span>
+            </button>
+            <button class="day-btn" data-day="2">
+                <span class="date">5</span>
+                <span class="weekday">周一</span>
+            </button>
+            <button class="day-btn" data-day="3">
+                <span class="date">6</span>
+                <span class="weekday">周二</span>
+            </button>
+            <button class="day-btn" data-day="4">
+                <span class="date">7</span>
+                <span class="weekday">周三</span>
+            </button>
+            <button class="day-btn" data-day="5">
+                <span class="date">8</span>
+                <span class="weekday">周四</span>
+            </button>
+            <button class="day-btn" data-day="6">
+                <span class="date">9</span>
+                <span class="weekday">周五</span>
+            </button>
+            <button class="day-btn" data-day="7">
+                <span class="date">10</span>
+                <span class="weekday">周六</span>
+            </button>
+            <button class="day-btn" data-day="8">
+                <span class="date">11</span>
+                <span class="weekday">周日</span>
+            </button>
+            <button class="day-btn" data-day="9">
+                <span class="date">12</span>
+                <span class="weekday">周一</span>
+            </button>
+            <button class="day-btn" data-day="10">
+                <span class="date">13</span>
+                <span class="weekday">周二</span>
+            </button>
+            <button class="day-btn" data-day="11">
+                <span class="date">14</span>
+                <span class="weekday">周三</span>
+            </button>
+            <button class="day-btn" data-day="12">
+                <span class="date">15</span>
+                <span class="weekday">周四</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- 舞台筛选 -->
+    <section style="padding: 0 50px 30px;">
+        <div class="stage-tabs fade-in">
+            <button class="stage-tab active" data-stage="all">全部舞台</button>
+            <button class="stage-tab" data-stage="main">星光主舞台</button>
+            <button class="stage-tab" data-stage="electronic">月光电音台</button>
+            <button class="stage-tab" data-stage="acoustic">森林原声台</button>
+        </div>
+    </section>
+
+    <!-- 时间线 -->
+    <section style="padding: 0 50px 100px;">
+        <div class="schedule-container">
+            <div class="timeline" id="timeline">
+                <!-- 第一天日程 -->
+                <div class="timeline-item fade-in" data-stage="main">
+                    <div class="timeline-time">14:00</div>
+                    <div class="timeline-content">
+                        <div class="timeline-info">
+                            <h4>开幕式</h4>
+                            <p>HKMU音乐节2026盛大开幕</p>
+                            <div class="timeline-meta">
+                                <span class="timeline-tag">星光主舞台</span>
+                            </div>
+                        </div>
+                        <div class="timeline-duration">60分钟</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in" data-stage="acoustic">
+                    <div class="timeline-time">15:30</div>
+                    <div class="timeline-content">
+                        <div class="timeline-info">
+                            <h4>HKMU学生乐团</h4>
+                            <p>香港都会大学学生乐团开场演出</p>
+                            <div class="timeline-meta">
+                                <span class="timeline-tag acoustic">森林原声台</span>
+                            </div>
+                        </div>
+                        <div class="timeline-duration">45分钟</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in" data-stage="main">
+                    <div class="timeline-time">17:00</div>
+                    <div class="timeline-content">
+                        <div class="timeline-info">
+                            <h4>本地乐队联盟</h4>
+                            <p>香港本地优秀乐队联合演出</p>
+                            <div class="timeline-meta">
+                                <span class="timeline-tag">星光主舞台</span>
+                            </div>
+                        </div>
+                        <div class="timeline-duration">90分钟</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in" data-stage="electronic">
+                    <div class="timeline-time">19:00</div>
+                    <div class="timeline-content">
+                        <div class="timeline-info">
+                            <h4>电音先锋</h4>
+                            <p>电子音乐专场演出</p>
+                            <div class="timeline-meta">
+                                <span class="timeline-tag electronic">月光电音台</span>
+                            </div>
+                        </div>
+                        <div class="timeline-duration">120分钟</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in" data-stage="main">
+                    <div class="timeline-time">21:00</div>
+                    <div class="timeline-content">
+                        <div class="timeline-info">
+                            <h4>星光巨星 - HEADLINER</h4>
+                            <p>开幕日头牌艺人压轴演出</p>
+                            <div class="timeline-meta">
+                                <span class="timeline-tag">星光主舞台</span>
+                            </div>
+                        </div>
+                        <div class="timeline-duration">120分钟</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in" data-stage="electronic">
+                    <div class="timeline-time">23:30</div>
+                    <div class="timeline-content">
+                        <div class="timeline-info">
+                            <h4>午夜电音派对</h4>
+                            <p>深夜电音狂欢，通宵不停歇</p>
+                            <div class="timeline-meta">
+                                <span class="timeline-tag electronic">月光电音台</span>
+                            </div>
+                        </div>
+                        <div class="timeline-duration">150分钟</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 日程概览 -->
+    <section class="schedule-overview">
+        <div class="section-header fade-in">
+            <p class="section-tag">OVERVIEW</p>
+            <h2 class="section-title">日程概览</h2>
+        </div>
+
+        <div class="overview-grid">
+            <div class="overview-card fade-in">
+                <div class="overview-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <h3>星光主舞台</h3>
+                <p>每日14:00-23:00开放，头牌艺人及大型演出，容纳5000人观看</p>
+            </div>
+            <div class="overview-card fade-in">
+                <div class="overview-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 18c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"/></svg>
+                </div>
+                <h3>月光电音台</h3>
+                <p>每日19:00-02:00开放，电子音乐专场，沉浸式视听体验</p>
+            </div>
+            <div class="overview-card fade-in">
+                <div class="overview-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                </div>
+                <h3>森林原声台</h3>
+                <p>每日15:00-21:00开放，原声音乐及独立艺人演出</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 下载区域 -->
+    <section class="download-section">
+        <div class="section-header fade-in">
+            <p class="section-tag">DOWNLOAD</p>
+            <h2 class="section-title">下载完整日程</h2>
+        </div>
+        <p class="fade-in">获取完整12天演出日程表，不错过任何精彩演出</p>
+        <a href="#" class="btn-primary fade-in">下载PDF日程表</a>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo">HKMU FEST</span>
+                <p>HKMU音乐节是香港都会大学年度音乐盛典，汇聚华语乐坛顶尖艺人，为你带来十二天的音乐狂欢。</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>快速链接</h4>
+                <ul>
+                    <li><a href="artists.html">艺人阵容</a></li>
+                    <li><a href="schedule.html">演出时间</a></li>
+                    <li><a href="tickets.html">购票</a></li>
+                    <li><a href="venue.html">场地信息</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>参与者须知</h4>
+                <ul>
+                    <li><a href="faq.html">入场须知</a></li>
+                    <li><a href="faq.html">禁止物品</a></li>
+                    <li><a href="faq.html">常见问题</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>更多信息</h4>
+                <ul>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="#">媒体合作</a></li>
+                    <li><a href="#">志愿者招募</a></li>
+                    <li><a href="#">商务合作</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 HKMU Music Festival. All Rights Reserved. | 香港都会大学音乐节</p>
+        </div>
+    </footer>
+
+    <script>
+        // 滚动动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 日期选择
+        const dayBtns = document.querySelectorAll('.day-btn');
+        dayBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                dayBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // 这里可以加载对应日期的日程
+            });
+        });
+
+        // 舞台筛选
+        const stageTabs = document.querySelectorAll('.stage-tab');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+
+        stageTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                stageTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const stage = tab.dataset.stage;
+
+                timelineItems.forEach(item => {
+                    if (stage === 'all' || item.dataset.stage === stage) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
