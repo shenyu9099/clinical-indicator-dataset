@@ -9999,3 +9999,4 @@ patient_id,age,sex,bmi,systolic_bp,diastolic_bp,glucose,cholesterol,creatinine,d
 10998,42,Male,23.6,115.0,81.0,81.4,250.7,0.5,0,0,Heart Failure,0,0
 10999,63,Female,30.0,148.0,73.0,78.6,184.6,1.07,0,0,Pneumonia,0,0
 11000,66,Female,36.5,129.0,75.0,118.1,135.8,1.42,0,0,Normal,0,0
+

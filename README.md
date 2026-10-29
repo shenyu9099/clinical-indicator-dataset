@@ -99,3 +99,4 @@ df = pd.read_csv("synthetic_clinical_dataset.csv")
 print(df.shape)   # (10000, 14)
 print(df.columns.tolist())
 ```
+
