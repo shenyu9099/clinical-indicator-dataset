@@ -1,8 +1,0 @@
-flask==3.0.3
-pandas==2.2.2
-numpy==1.26.4
-scikit-learn==1.5.1
-pymysql==1.1.1
-sqlalchemy==2.0.32
-joblib==1.4.2
-python-dotenv==1.0.1
